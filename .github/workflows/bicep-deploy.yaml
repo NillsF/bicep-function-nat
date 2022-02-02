@@ -68,10 +68,24 @@ jobs:
         id: fa
         shell: bash
         run: |
-          URL=$(az functionapp function show \
-            --function-name httptrigger1 \
-            --name nfvnet-${{ github.run_number }} \
-            -g nfvnet-${{ github.run_number }} \
-            --query "invokeUrlTemplate" --output tsv)
+          URL = ''
+          while [ -z "$URL" ]
+          do
+            echo "trying to get URL"
+            URL=$(az functionapp function show \
+              --function-name httptrigger1 \
+              --name nfvnet-${{ github.run_number }} \
+              -g nfvnet-${{ github.run_number }} \
+              --query "invokeUrlTemplate" --output tsv)
+            echo $URL
+          done
           echo "::set-output name=func_url::$URL"
 
+  delete:
+    runs-on: ubuntu-latest
+    environment: delete
+    steps:
+      - name: "delete all stuff"
+        shell: bash
+        run: |
+          az group delete --yes -n nfvnet-${{ github.run_number }}
