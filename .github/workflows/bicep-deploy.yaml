@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_NAME: nfvnet-vivs36yb5tm7q # set this to your application's name
+  AZURE_FUNCTIONAPP_NAME: nfvnet-x6ryeapb2kb7o # set this to your application's name
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './function'   # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.9'
 

@@ -55,7 +55,9 @@ resource plan 'Microsoft.Web/serverFarms@2020-06-01' = {
   sku: {
     name: 'Y1'
   }
-  properties: {}
+  properties: {
+    reserved: true
+  }
 }
 
 resource functionApp 'Microsoft.Web/sites@2020-06-01' = {
