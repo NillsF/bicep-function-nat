@@ -85,6 +85,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: delete
     steps:
+          # Runs a single command using the runners shell
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: "delete all stuff"
         shell: bash
         run: |
