@@ -20,7 +20,10 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  deploy:
+    environment:
+      name: deploy
+      url: ${{ steps.fa.outputs.func_url }}
     runs-on: ubuntu-latest
 
     steps:
@@ -57,7 +60,18 @@ jobs:
           popd
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
-        id: fa
         with:
           app-name: nfvnet-${{ github.run_number }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+      
+      - name: 'Get Function URL'
+        id: fa
+        shell: bash
+        run: |
+          URL=$(az functionapp function show \
+            --function-name httptrigger1 \
+            --name nfvnet-${{ github.run_number }} \
+            -g nfvnet-${{ github.run_number }} \
+            --query "invokeUrlTemplate" --output tsv)
+          echo "::set-output name=func_url::$URL"
+
