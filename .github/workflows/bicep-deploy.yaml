@@ -20,12 +20,9 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -35,6 +32,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
         
+      - name: "deploy infra using bicep"
+        shell: bash
+        run: |
+          RGNAME = 'nfvnet-$${{ github.run_number }}'
+          az group create -n $RGNAME -l westus2
+          az deployment group create
+            --name nfvnet-$${{ github.run_number }} \
+            --resource-group $RGNAME \
+            --template-file IaC/function.bicep \
+            --parameters appNameSuffix=${{ github.run_number }}
+
       - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
         uses: actions/setup-python@v1
         with:
@@ -51,5 +59,5 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          app-name: nfvnet-${{ github.run_number }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
