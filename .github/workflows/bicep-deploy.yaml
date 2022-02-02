@@ -37,7 +37,7 @@ jobs:
         run: |
           RGNAME='nfvnet-${{ github.run_number }}'
           az group create -n $RGNAME -l westus2
-          az deployment group create
+          az deployment group create \
             --name nfvnet-${{ github.run_number }} \
             --resource-group $RGNAME \
             --template-file IaC/function.bicep \
