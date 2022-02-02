@@ -82,6 +82,7 @@ jobs:
           echo "::set-output name=func_url::$URL"
 
   delete:
+    needs: deploy
     runs-on: ubuntu-latest
     environment: delete
     steps:

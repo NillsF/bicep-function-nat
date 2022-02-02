@@ -61,6 +61,14 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
         name: subnetName
         properties: {
           addressPrefix: vnetSubnetPrefix
+          delegations: [
+            {
+              name: 'delegation'
+              properties: {
+                serviceName: 'Microsoft.Web/serverFarms'
+              }
+            }
+          ]
           natGateway: {
             id: natGateway.id
           }
