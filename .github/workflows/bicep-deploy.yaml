@@ -68,7 +68,7 @@ jobs:
         id: fa
         shell: bash
         run: |
-          URL = ''
+          URL=''
           while [ -z "$URL" ]
           do
             echo "trying to get URL"
